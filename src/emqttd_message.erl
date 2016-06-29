@@ -140,7 +140,7 @@ set_flag(Flag, Msg) when Flag =:= dup orelse Flag =:= retain -> Msg.
 %% @doc Unset dup, retain flag
 -spec(unset_flag(mqtt_message()) -> mqtt_message()).
 unset_flag(Msg) ->
-    Msg#mqtt_message{dup = false, retain = false}.
+    Msg#mqtt_message{dup = false, retain = false, timestamp = os:timestamp()}.
 
 -spec(unset_flag(dup | retain | atom(), mqtt_message()) -> mqtt_message()).
 unset_flag(dup, Msg = #mqtt_message{dup = true}) -> 
@@ -151,9 +151,9 @@ unset_flag(Flag, Msg) when Flag =:= dup orelse Flag =:= retain -> Msg.
 
 %% @doc Format MQTT Message
 format(#mqtt_message{msgid = MsgId, pktid = PktId, from = From, sender = Sender,
-                     qos = Qos, retain = Retain, dup = Dup, topic = Topic, time = Time}) ->
+                     qos = Qos, retain = Retain, dup = Dup, topic = Topic}) ->
     io_lib:format("Message(Q~p, R~p, D~p, MsgId=~p, PktId=~p, From=~s, Sender=~s, Topic=~s)",
-                  [i(Qos), i(Retain), i(Dup), MsgId, PktId, From, Sender, Topic, Time]).
+                  [i(Qos), i(Retain), i(Dup), MsgId, PktId, From, Sender, Topic]).
 
 i(true)  -> 1;
 i(false) -> 0;
