@@ -99,7 +99,7 @@ update_subscription(ClientId, Topic, OldQos, NewQos) ->
 publish(Msg = #mqtt_message{from = From}) ->
     trace(publish, From, Msg),
     case emqttd:run_hooks('message.publish', [], Msg) of
-        {ok, Msg1 = #mqtt_message{topic = Topic, time = emqttd_time:now_to_ms()}} ->
+        {ok, Msg1 = #mqtt_message{topic = Topic, timestamp = os:timestamp()}} ->
             %% Retain message first. Don't create retained topic.
             Msg2 = case emqttd_retainer:retain(Msg1) of
                        ok     -> emqttd_message:unset_flag(Msg1);
